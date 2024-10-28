@@ -1,0 +1,40 @@
+def shortest_path(source, target):
+    """
+    Returns the shortest list of (movie_id, person_id) pairs
+    that connect the source to the target.
+
+    If no possible path, returns None.
+    """
+    #initialize the frontier to be a queue frontier because BFS is a queue and will find
+    #the shortest path
+    frontier = QueueFrontier()
+    #first node is added to the frontier
+    frontier.add(Node(source, None, None))
+    #Initialize the nodes explored as a empty set
+    nodesExplored = set()
+    if source == target:
+        raise Exception("Can't choose the same actor twice!")
+    # Keep looping until solution found
+    while True:
+        #if there are no solutions then just return None
+        if frontier.empty():
+            return None
+        # Choose a node from the frontier and remove it
+        node = frontier.remove()
+        # If node is the target, then we have a reached our goal state, our solution
+        if node.state == target:
+            #initalize an array of solutions
+            solutions = []
+            # continue to search if node has a parent
+            while node.parent is not None:
+                solutions.append(node.action, node.state)
+                node = node.parent
+            solutions.reverse()
+            return solutions
+        # Mark node as explored
+        nodesExplored.add(node.state)
+        # Add neighbors to frontier
+        for movie_id, person_id in neighbors_for_person(node.state):
+            if not frontier.contains_state(person_id) and person_id not in nodesExplored:
+                child = Node(person_id, node, movie_id)
+                frontier.add(child)
